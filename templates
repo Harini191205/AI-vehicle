@@ -1,0 +1,5 @@
+project_folder/
+│
+├── app.py
+└── templates/
+    └── vehicle_map.html

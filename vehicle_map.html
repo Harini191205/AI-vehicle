@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Map Movement Controls</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    #map {
+      height: 90vh;
+      width: 100%;
+    }
+    .controls {
+      text-align: center;
+      margin: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div class="controls">
+  <button onclick="start()">Start</button>
+  <button onclick="stop()">Stop</button>
+  <button onclick="move('left')">Left</button>
+  <button onclick="move('right')">Right</button>
+  <button onclick="move('up')">Up</button>
+  <button onclick="move('down')">Down</button>
+</div>
+
+<script>
+  // Initial coordinates
+  let lat = 40.7177;
+  let lng = -74.0059;
+
+  // Create map
+  const map = L.map('map').setView([lat, lng], 18);
+
+  // Tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Custom colored icon (like in your screenshot)
+  const icon = L.divIcon({
+    className: '',
+    html: `<div style="width: 30px; height: 30px; background: #00BCD4; border: 3px solid #E91E63; border-radius: 5px;"></div>`,
+    iconSize: [30, 30]
+  });
+
+  // Marker with custom icon
+  let marker = L.marker([lat, lng], { icon: icon }).addTo(map);
+
+  let interval = null;
+
+  function start() {
+    interval = setInterval(() => {
+      lat += 0.0001;
+      updateMarker();
+    }, 200);
+  }
+
+  function stop() {
+    clearInterval(interval);
+  }
+
+  function move(direction) {
+    switch (direction) {
+      case 'left': lng -= 0.0001; break;
+      case 'right': lng += 0.0001; break;
+      case 'up': lat += 0.0001; break;
+      case 'down': lat -= 0.0001; break;
+    }
+    updateMarker();
+  }
+
+  function updateMarker() {
+    marker.setLatLng([lat, lng]);
+    map.panTo([lat, lng]);
+  }
+</script>
+
+</body>
+</html>
